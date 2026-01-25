@@ -38,6 +38,14 @@ const initialSongs = [
         releaseYear: 1997,
         durationSeconds: 204,
         isExplicit: false
+    },
+    {
+        id: "5",
+        title: "King Nothing",
+        artist: "Metallica",
+        releaseYear: 1996,
+        durationSeconds: 328,
+        isExplicit: false
     }
 ];
 
