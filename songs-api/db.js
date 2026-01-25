@@ -1,9 +1,11 @@
-import Datastore from '@seald-io/nedb';
+import { MongoClient } from 'mongodb';
 
-const dbPath = process.env.DB_PATH || './data/songs.db';
-const db = new Datastore({ filename: dbPath, autoload: true });
+const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const dbName = 'songsdb';
 
-// Seed data - 4 initial songs
+let db = null;
+let songsCollection = null;
+
 const initialSongs = [
     {
         id: "1",
@@ -39,17 +41,28 @@ const initialSongs = [
     }
 ];
 
-// Initialize DB with seed data
-db.count({}, (err, count) => {
-    if (count === 0) {
-        db.insert(initialSongs, (err) => {
-            if (err) {
-                console.error('Error seeding database:', err);
-            } else {
-                console.log('Database seeded with initial songs');
-            }
-        });
-    }
-});
+export async function connectDB() {
+    if (db) return db;
 
-export default db;
+    const client = new MongoClient(mongoUri);
+    await client.connect();
+    console.log('Connected to MongoDB');
+
+    db = client.db(dbName);
+    songsCollection = db.collection('songs');
+
+    // Seed data if collection is empty
+    const count = await songsCollection.countDocuments();
+    if (count === 0) {
+        await songsCollection.insertMany(initialSongs);
+        console.log('Database seeded with initial songs');
+    }
+
+    return db;
+}
+
+export function getSongsCollection() {
+    return songsCollection;
+}
+
+export default { connectDB, getSongsCollection };
