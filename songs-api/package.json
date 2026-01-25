@@ -1,0 +1,18 @@
+{
+    "name": "songs-api",
+    "version": "1.0.0",
+    "description": "This is generated using OAS Tools CLI",
+    "license": "UNLICENSED",
+    "type": "module",
+    "private": true,
+    "main": "index.js",
+    "scripts": {
+        "prestart": "npm install --only=prod",
+        "start": "node index.js",
+        "build": "docker build . -t songs-api:1.0.0 -t songs-api:latest"
+    },
+    "dependencies": {
+        "express": "^4.18.0",
+        "@oas-tools/core": "^3.0.0"
+    }
+}
