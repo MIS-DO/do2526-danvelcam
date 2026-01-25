@@ -1,6 +1,7 @@
 import Datastore from '@seald-io/nedb';
 
-const db = new Datastore();
+const dbPath = process.env.DB_PATH || './data/songs.db';
+const db = new Datastore({ filename: dbPath, autoload: true });
 
 // Seed data - 4 initial songs
 const initialSongs = [
