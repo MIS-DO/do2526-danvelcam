@@ -131,3 +131,6 @@ dist
 
 # Project specific folders
 data/
+# Environment files
+.env.dev
+.env.prod
