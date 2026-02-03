@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+import logger from './logger.js';
 
 const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017';
 const dbName = 'songsdb';
@@ -54,7 +55,7 @@ export async function connectDB() {
 
     const client = new MongoClient(mongoUri);
     await client.connect();
-    console.log('Connected to MongoDB');
+    logger.info('Connected to MongoDB');
 
     db = client.db(dbName);
     songsCollection = db.collection('songs');
@@ -63,7 +64,7 @@ export async function connectDB() {
     const count = await songsCollection.countDocuments();
     if (count === 0) {
         await songsCollection.insertMany(initialSongs);
-        console.log('Database seeded with initial songs');
+        logger.info('Database seeded with initial songs');
     }
 
     return db;
