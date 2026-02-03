@@ -1,13 +1,34 @@
-version: '3.8'
-
 services:
   songs-api:
-    # ensuring we use the build context for dev to ensure latest code
     build: .
     environment:
       - NODE_ENV=development
+      - VIRTUAL_HOST=api-dev.songs.local
+      - VIRTUAL_PORT=8080
     volumes:
-       # Optional: Bind mount source for easier debugging if desired, implies needing nodemon for hot reload though
-       # - .:/usr/src/app
-       # - /usr/src/app/node_modules
        - api-logs:/usr/src/app/logs
+    networks:
+      - default
+      - songs-proxy-network
+
+  songs-web:
+    build:
+      context: ./songs-app
+      target: build
+    command: npm run dev
+    volumes:
+      - ./songs-app:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://api-dev.songs.local/api/v1
+      - VIRTUAL_HOST=dev.songs.local
+      - VIRTUAL_PORT=5173
+    networks:
+      - default
+      - songs-proxy-network
+
+networks:
+  songs-proxy-network:
+    external: true
