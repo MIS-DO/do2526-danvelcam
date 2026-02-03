@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  songs-api:
+    # In production, we might prefer using the pre-built image or ensuring specific tag
+    # For this exercise, using the same build/image but with prod settings
+    environment:
+      - NODE_ENV=production
+    restart: always

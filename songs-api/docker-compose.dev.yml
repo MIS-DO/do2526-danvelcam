@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  songs-api:
+    # ensuring we use the build context for dev to ensure latest code
+    build: .
+    environment:
+      - NODE_ENV=development
+    volumes:
+       # Optional: Bind mount source for easier debugging if desired, implies needing nodemon for hot reload though
+       # - .:/usr/src/app
+       # - /usr/src/app/node_modules
+       - api-logs:/usr/src/app/logs
